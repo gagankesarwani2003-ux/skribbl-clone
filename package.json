@@ -1,0 +1,17 @@
+{
+  "name": "skribbl-clone",
+  "version": "1.0.0",
+  "description": "Full-stack skribbl.io clone with real-time WebSockets, canvas drawing, and interactive gameplay",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "build:client": "npm --prefix client run build",
+    "build:server": "npm --prefix server run build",
+    "build": "npm --prefix client run build && npm --prefix server run build",
+    "start": "npm --prefix server run start"
+  },
+  "keywords": ["skribbl", "drawing-game", "socketio", "react", "typescript"],
+  "author": "",
+  "license": "MIT"
+}
