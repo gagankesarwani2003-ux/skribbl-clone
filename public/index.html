@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>skribbl.io - Free Multiplayer Drawing &amp; Guessing Game</title>
+  <link rel="icon" href="/img/logo_halloween.gif">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ================= LOBBY / HOME VIEW (Exact Replica) ================= -->
+  <div id="home">
+    <!-- Big Logo + Character Parade -->
+    <div class="logo-big">
+      <a href="/"><img src="/img/logo_halloween.gif" alt="skribbl.io"></a>
+      <div class="avatar-container" id="logo-avatar-row"></div>
+    </div>
+
+    <!-- Center Panels -->
+    <div class="panels">
+      <div class="panel">
+        <!-- Name & Language -->
+        <div class="container-name-lang">
+          <input class="input-name" id="input-name" type="text" placeholder="Enter your name" maxlength="20" autocomplete="off" spellcheck="false">
+          <select class="select-lang" id="select-lang">
+            <option value="en">English</option>
+            <option value="de">German</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="it">Italian</option>
+            <option value="pt">Portuguese</option>
+            <option value="ru">Russian</option>
+          </select>
+        </div>
+
+        <!-- Avatar Customizer with Sprite Atlas & Arrows -->
+        <div class="avatar-customizer">
+          <div class="arrows left">
+            <div class="arrow left" id="btn-prev-eyes" title="Previous Eyes"></div>
+            <div class="arrow left" id="btn-prev-mouth" title="Previous Mouth"></div>
+            <div class="arrow left" id="btn-prev-color" title="Previous Color"></div>
+          </div>
+
+          <div class="container" id="avatar-preview-box"></div>
+
+          <div class="arrows right">
+            <div class="arrow right" id="btn-next-eyes" title="Next Eyes"></div>
+            <div class="arrow right" id="btn-next-mouth" title="Next Mouth"></div>
+            <div class="arrow right" id="btn-next-color" title="Next Color"></div>
+          </div>
+
+          <div class="randomize" id="btn-randomize-avatar" title="Randomize your Avatar!"></div>
+        </div>
+
+        <!-- Play & Create Room Buttons -->
+        <button class="button-play" id="btn-quick-play">Play!</button>
+        <button class="button-create" id="btn-create-room-modal">Create Private Room</button>
+
+        <!-- Room Code Direct Join -->
+        <div class="container-join-code">
+          <input type="text" id="input-room-code" placeholder="ROOM CODE" maxlength="6" autocomplete="off">
+          <button id="btn-join-room">Join</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Info Sections: About, News, How to Play -->
+    <div class="bottom">
+      <svg viewBox="0 0 1 1" preserveAspectRatio="none"><polygon points="0,0 1,1 0,1"></polygon></svg>
+      <div class="footer">
+        <div class="section-container">
+          <!-- Section 1: About -->
+          <div class="section panel">
+            <img class="icon" src="/img/about.gif" alt="About">
+            <h2>About</h2>
+            <br>
+            <b>skribbl.io</b> is a free online multiplayer drawing and guessing pictionary game.
+            <br><br>
+            A normal game consists of a few rounds, where every round a player has to draw their chosen word and others have to guess it to gain points!
+            <br><br>
+            The person with the most points at the end of the game, will then be crowned as the winner!
+            <br><br>
+            Have fun!
+          </div>
+
+          <!-- Section 2: News -->
+          <div class="section panel">
+            <img class="icon" src="/img/news.gif" alt="News">
+            <h2>News</h2>
+            <div class="news">
+              <div class="head">
+                <span class="title">Fresh paint</span>
+                <span class="date">9th November 2022</span>
+              </div>
+              <div class="content">
+                Hello!
+                <ul>
+                  <li>Redesign of the page</li>
+                  <li>Multiplayer rooms &amp; real-time canvas</li>
+                  <li>Reworked toolbar: bucket fill, brush sizes, undo</li>
+                  <li>Custom word hints &amp; close-guess detection</li>
+                  <li>Configurable private rooms &amp; round options</li>
+                  <li>Authentic avatar sprite customization</li>
+                </ul>
+                <br>
+                Hope you enjoy it!
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: How to Play -->
+          <div class="section panel">
+            <img class="icon" src="/img/how.gif" alt="How to play">
+            <h2>How to play</h2>
+            <div id="tutorial">
+              <div class="page" id="tutorial-step">
+                <img id="tutorial-img" src="/img/tutorial/step1.gif" alt="Tutorial">
+                <div class="description" id="tutorial-desc">When it's your turn, choose a word you want to draw!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= IN-GAME VIEW ================= -->
+  <div id="view-game" class="screen-view hidden">
+    <!-- Top HUD Bar -->
+    <header id="game-header">
+      <div class="header-left">
+        <div class="room-tag">
+          <span class="room-title">ROOM:</span>
+          <span id="display-room-code" class="room-code">------</span>
+          <button id="btn-copy-invite" class="btn-tiny" title="Copy room invite link">Copy Invite</button>
+        </div>
+        <div id="display-round" class="round-badge">Round 1 of 3</div>
+      </div>
+
+      <div class="header-center">
+        <div id="word-display" class="word-hint-banner">Waiting for game...</div>
+      </div>
+
+      <div class="header-right">
+        <div id="display-timer" class="timer-badge">80s</div>
+        <button id="btn-toggle-sound" class="btn-sound" title="Toggle Sound">🔊 Sound: On</button>
+      </div>
+    </header>
+
+    <!-- Main Game Layout Grid -->
+    <main id="game-container">
+      <!-- Left: Player Leaderboard -->
+      <aside id="game-players">
+        <div class="players-header">Players</div>
+        <div id="player-list" class="players-scroll"></div>
+      </aside>
+
+      <!-- Center: Drawing Canvas & Tools -->
+      <section id="game-canvas-area">
+        <div id="canvas-wrapper">
+          <canvas id="game-canvas"></canvas>
+
+          <!-- Canvas Overlay: Waiting Lobby -->
+          <div id="overlay-waiting-lobby" class="canvas-overlay">
+            <div class="overlay-card">
+              <h2>Lobby</h2>
+              <p id="waiting-host-msg" class="overlay-msg">Waiting for the host to start the game...</p>
+              <button id="btn-host-start-game" class="button-play hidden" style="width:100%; font-size:1.4rem;">
+                🚀 Start Game!
+              </button>
+              <p style="font-size:0.9rem; color:#94a3b8; margin-top:12px;">Share the room code or invite link with friends to play together!</p>
+            </div>
+          </div>
+
+          <!-- Canvas Overlay: Word Choice -->
+          <div id="overlay-word-choice" class="canvas-overlay hidden">
+            <div class="overlay-card">
+              <h2>Choose a Word to Draw!</h2>
+              <div id="word-options-container" class="word-options"></div>
+            </div>
+          </div>
+
+          <!-- Canvas Overlay: Round End -->
+          <div id="overlay-round-end" class="canvas-overlay hidden">
+            <div class="overlay-card">
+              <h2>Round Ended!</h2>
+              <p class="word-reveal-label">The secret word was:</p>
+              <div id="round-end-word" class="word-reveal">APPLE</div>
+              <p id="round-end-reason" style="font-weight:700; color:#38bdf8;"></p>
+            </div>
+          </div>
+
+          <!-- Canvas Overlay: Game Over -->
+          <div id="overlay-game-over" class="canvas-overlay hidden">
+            <div class="overlay-card">
+              <h2>🏆 Game Over!</h2>
+              <div id="podium-container" class="podium-display"></div>
+              <button id="btn-play-again" class="button-play hidden" style="width:100%;">
+                🔄 Play Again
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drawing Toolbar (Active Drawer Only) -->
+        <div id="drawing-toolbar" class="toolbar hidden">
+          <!-- Color Palette -->
+          <div id="color-palette" class="palette-grid"></div>
+
+          <!-- Tools -->
+          <div class="tool-group">
+            <button id="tool-brush" class="tool-btn active" title="Brush">✏️</button>
+            <button id="tool-eraser" class="tool-btn" title="Eraser">🧹</button>
+            <button id="tool-fill" class="tool-btn" title="Fill Bucket">🪣</button>
+            <button id="tool-undo" class="tool-btn" title="Undo">↩️</button>
+            <button id="tool-clear" class="tool-btn" title="Clear Canvas">🗑️</button>
+          </div>
+
+          <!-- Brush Sizes -->
+          <div class="tool-group size-group">
+            <button id="size-s" class="brush-size-btn" title="Small"><span class="dot dot-s"></span></button>
+            <button id="size-m" class="brush-size-btn active" title="Medium"><span class="dot dot-m"></span></button>
+            <button id="size-l" class="brush-size-btn" title="Large"><span class="dot dot-l"></span></button>
+            <button id="size-xl" class="brush-size-btn" title="Huge"><span class="dot dot-xl"></span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Chat & Guessing Box -->
+      <aside id="game-chat">
+        <div id="chat-messages" class="chat-stream"></div>
+        <form id="chat-form" class="chat-input-bar">
+          <input type="text" id="chat-input" placeholder="Type your guess here..." maxlength="100" autocomplete="off">
+          <button type="submit" id="btn-send-chat">Send</button>
+        </form>
+      </aside>
+    </main>
+  </div>
+
+  <!-- ================= MODAL: CREATE ROOM ================= -->
+  <div id="modal-create-room" class="modal-backdrop hidden">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>Create Private Room</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <label for="select-rounds">Rounds:</label>
+          <select id="select-rounds">
+            <option value="2">2 Rounds</option>
+            <option value="3" selected>3 Rounds</option>
+            <option value="5">5 Rounds</option>
+            <option value="8">8 Rounds</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="select-draw-time">Drawing Time:</label>
+          <select id="select-draw-time">
+            <option value="40">40 seconds</option>
+            <option value="60">60 seconds</option>
+            <option value="80" selected>80 seconds</option>
+            <option value="100">100 seconds</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-confirm-create-room" class="button-create">Create Room</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/canvas.js"></script>
+  <script src="js/client.js"></script>
+</body>
+</html>
