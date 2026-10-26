@@ -1,6 +1,9 @@
 # Skribbl Clone 🎨
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-skribbl--clone-brightgreen?style=for-the-badge&logo=render)](https://skribbl-clone-0m8y.onrender.com)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/gagankesarwani2003-ux/skribbl-clone)
+
+Play now: **[https://skribbl-clone-0m8y.onrender.com](https://skribbl-clone-0m8y.onrender.com)**
 
 A full-featured, high-performance real-time multiplayer drawing and guessing game inspired by [skribbl.io](https://skribbl.io/). Reverse-engineered using **REA (Reverse Engineer Anything)** to extract the core game loop, canvas synchronization mechanics, and scoring algorithms.
 
